@@ -8,6 +8,12 @@ import seaborn as sns
 st.markdown("<h2 style='text-align: center; color: white;'>Wrapped in Python </h2>", unsafe_allow_html=True)
 st.markdown(":blue[This application will go over your spotify listening trends and give you insight into your habits and listening history]")
 
+helpSpotify = st.popover("Don't know how to download your Spotify history?")
+
+with helpSpotify:
+    st.write("Go to Spotify -> Click on security and Privacy -> Go to account privacy --> Scroll down to download data & request data --> Wait a minimum of 30 days to get your data through your email --> After obtaining it, unzip it and upload any one of the JSONs into the app.")
+
+
 uploaded_file = st.file_uploader("Upload your `StreamingHistory.json` file from Spotify", type="json")
 
 if uploaded_file:
@@ -31,11 +37,10 @@ if uploaded_file:
     total_unique_artists = df['master_metadata_album_artist_name'].nunique()
     
     
+    st.markdown(f"<h2 style='text-align: center; color: white;'> You've listened to songs for {total_hours:.2f} hours... </h2>", unsafe_allow_html=True)
+    st.markdown(f"<h2 style='text-align: center; color: white;'> You've played {total_tracks} different songs... </h2>", unsafe_allow_html=True)
+    st.markdown(f"<h2 style='text-align: center; color: white;'> You've listened to {total_unique_artists} different artists... </h2>", unsafe_allow_html=True)
 
-    col1, col2, col3 = st.columns(3,border = True,gap="medium")
-    col1.metric("you've listened to songs for", f"{total_hours:.2f} hours..")
-    col2.metric("you've played ", f"{total_tracks} different songs....")
-    col3.metric("you've listened to ", f"{total_unique_artists} different artists")
     
     container = st.container(border=True)
 
@@ -43,6 +48,9 @@ if uploaded_file:
     with container:
         st.subheader("Your top 10 artists for this month: ")
         st.bar_chart(top_artists,y_label="Hours",x_label="Artists",)
+        what1 = st.popover("What does this show?")
+        with what1:
+            st.write("These are the top artists categorized by which had the most hours listened to")
 
     container2 = st.container(border=True)
 
@@ -50,6 +58,9 @@ if uploaded_file:
     with container2:
         st.subheader("Listening Time Per Day:")
         st.line_chart(daily_listening, x_label= "Dates",y_label="Minutes")
+        what1 = st.popover("What does this show?")
+        with what1:
+            st.write("This is the listening time per day of the user. It takes different dates and shows us how the listening time per day has changed.")
     
     
     top_albums = (
@@ -60,7 +71,7 @@ if uploaded_file:
     
     container3 = st.container(border = True)
     with container3:
-
+        
         fig, ax = plot.subplots()
         fig.patch.set_facecolor('black') 
         ax.set_facecolor('black')    
@@ -71,6 +82,9 @@ if uploaded_file:
             text.set_color('white')
             
         st.pyplot(fig)
+        what2 = st.popover("What does this show?")
+        with what2:
+            st.write("These albums are the Top 6 Albums of the user and the percent is how much of the album they have listened to out of all albums")
     
     container4 = st.container(border = True)
     with container4:
@@ -80,7 +94,6 @@ if uploaded_file:
         top_tracks = top_tracks[::-1]
 
         st.bar_chart(top_tracks, y_label="Minutes", x_label="Track Name", use_container_width=True)
-
-
-
-
+        what3 = st.popover("What does this show?")
+        with what3:
+            st.write("These are the songs that had the most minutes listened to from the Spotify Wrapped. These are the songs that were most likely the favorite of the user")
