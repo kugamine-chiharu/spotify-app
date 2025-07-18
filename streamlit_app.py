@@ -36,17 +36,18 @@ if uploaded_file:
     total_tracks = len(df)
     total_unique_artists = df['master_metadata_album_artist_name'].nunique()
     
-    
-    st.markdown(f"<h2 style='text-align: center; color: white;'> You've listened to songs for {total_hours:.2f} hours... </h2>", unsafe_allow_html=True)
-    st.markdown(f"<h2 style='text-align: center; color: white;'> You've played {total_tracks} different songs... </h2>", unsafe_allow_html=True)
-    st.markdown(f"<h2 style='text-align: center; color: white;'> You've listened to {total_unique_artists} different artists... </h2>", unsafe_allow_html=True)
+    contain = st.container()
+    with contain:
+        st.markdown(f"<h2 style='text-align: center; color: white;'> You've listened to songs for {total_hours:.2f} hours... </h2>", unsafe_allow_html=True)
+        st.markdown(f"<h2 style='text-align: center; color: white;'> You've played {total_tracks} different songs... </h2>", unsafe_allow_html=True)
+        st.markdown(f"<h2 style='text-align: center; color: white;'> You've listened to {total_unique_artists} different artists... </h2>", unsafe_allow_html=True)
 
     
     container = st.container(border=True)
 
     top_artists = df.groupby('master_metadata_album_artist_name')['hours_played'].sum().sort_values(ascending=False).head(10)
     with container:
-        st.subheader("Your top 10 artists for this month: ")
+        st.subheader("Your top 10 artists: ")
         st.bar_chart(top_artists,y_label="Hours",x_label="Artists",)
         what1 = st.popover("What does this show?")
         with what1:
